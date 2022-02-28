@@ -53,10 +53,17 @@ int main()
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     GLfloat vertices[] =
+    { //  x      y    //  R     G     B
+        -0.5f,  0.5f,    1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,    0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,    0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,    1.0f, 1.0f, 1.0f,
+    };
+
+    GLuint indices[] =
     {
-         0.0f,  0.5f,
-         0.5f, -0.5f,
-        -0.5f, -0.5f
+        0, 1, 2,
+        2, 3, 0
     };
 
     GLuint vao;
@@ -68,14 +75,23 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    GLuint ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
     const GLchar* vertexSource = R"glsl(
         #version 330 core
         
-        in vec2 position;
+        in vec2 i_Position;
+        in vec3 i_Color;
+
+        out vec3 p_Color;
     
         void main()
         {
-            gl_Position = vec4(position, 0.0, 1.0);
+            p_Color = i_Color;
+            gl_Position = vec4(i_Position, 0.0, 1.0);
         }
     )glsl";
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -85,12 +101,14 @@ int main()
 
     const GLchar* fragmentSource = R"glsl(
         #version 330 core
-        
+
+        in vec3 p_Color;
+
         out vec4 color;
         
         void main()
         {
-            color = vec4(1.0, 1.0, 1.0, 1.0);
+            color = vec4(p_Color, 1.0);
         }
     )glsl";
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -104,9 +122,13 @@ int main()
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
 
-    GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    GLint posAttrib = glGetAttribLocation(shaderProgram, "i_Position");
     glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+    
+    GLint colAttrib = glGetAttribLocation(shaderProgram, "i_Color");
+    glEnableVertexAttribArray(colAttrib);
+    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) (2 * sizeof(GLfloat)));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -115,12 +137,19 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
 
         glfwPollEvents();
     }
+
+    glDeleteProgram(shaderProgram);
+    glDeleteShader(fragmentShader);
+    glDeleteShader(vertexShader);
+
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
 
     glfwTerminate();
     
