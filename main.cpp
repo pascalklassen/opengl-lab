@@ -1,9 +1,16 @@
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #include <iostream>
 #include <string>
+#include <chrono>
 
 #include "Debug.h"
 
@@ -55,6 +62,26 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     GLfloat vertices[] =
     { //  x      y    //  R     G     B    //  S     T
         -0.5f,  0.5f,    1.0f, 0.0f, 0.0f,    0.0f, 1.0f, // Top-left
@@ -92,12 +119,16 @@ int main()
 
         out vec3 p_Color;
         out vec2 p_TexCoord;
+
+        uniform mat4 u_Model;
+        uniform mat4 u_View;
+        uniform mat4 u_Proj;
     
         void main()
         {
             p_TexCoord = i_TexCoord;
             p_Color = i_Color;
-            gl_Position = vec4(i_Position, 0.0, 1.0);
+            gl_Position = u_Proj * u_View * u_Model * vec4(i_Position, 0.0, 1.0);
         }
     )glsl";
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -113,13 +144,13 @@ int main()
 
         out vec4 color;
 
-        uniform sampler2D texKitten;
-        uniform sampler2D texPuppy;
+        uniform sampler2D u_Kitten;
+        uniform sampler2D u_Puppy;
         
         void main()
         {
-            vec4 colKitten = texture(texKitten, p_TexCoord);
-            vec4 colPuppy = texture(texPuppy, p_TexCoord);
+            vec4 colKitten = texture(u_Kitten, p_TexCoord);
+            vec4 colPuppy = texture(u_Puppy, p_TexCoord);
             color = mix(colKitten, colPuppy, 0.5);
         }
     )glsl";
@@ -157,8 +188,8 @@ int main()
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, textures[0]));
     GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img));
     stbi_image_free(img);
-    GL_CHECK(GLint texKitten = glGetUniformLocation(shaderProgram, "texKitten"));
-    GL_CHECK(glUniform1i(texKitten, 0));
+    GL_CHECK(GLint u_Kitten = glGetUniformLocation(shaderProgram, "u_Kitten"));
+    GL_CHECK(glUniform1i(u_Kitten, 0));
     /* Wrapping */
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
@@ -171,8 +202,8 @@ int main()
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, textures[1]));
     GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img));
     stbi_image_free(img);
-    GL_CHECK(GLint texPuppy = glGetUniformLocation(shaderProgram, "texPuppy"));
-    GL_CHECK(glUniform1i(texPuppy, 1));
+    GL_CHECK(GLint u_Puppy = glGetUniformLocation(shaderProgram, "u_Puppy"));
+    GL_CHECK(glUniform1i(u_Puppy, 1));
     /* Wrapping */
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
@@ -180,6 +211,19 @@ int main()
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
+    glm::mat4 view = glm::lookAt(
+        glm::vec3{ 1.2f, 1.2f, 1.2f },
+        glm::vec3{ 0.0f, 0.0f, 0.0f },
+        glm::vec3{ 0.0f, 0.0f, 1.0f }
+    );
+    GL_CHECK(GLint u_View = glGetUniformLocation(shaderProgram, "u_View"));
+    GL_CHECK(glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view)));
+
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
+    GL_CHECK(GLint u_Proj = glGetUniformLocation(shaderProgram, "u_Proj"));
+    GL_CHECK(glUniformMatrix4fv(u_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
+
+    auto t_start = std::chrono::high_resolution_clock::now();
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -187,7 +231,36 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow();
+
+        auto t_now = std::chrono::high_resolution_clock::now();
+        float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+
+        glm::mat4 model{ 1.0f };
+        model = glm::rotate(model, time * glm::radians(180.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+        GL_CHECK(GLint u_Model = glGetUniformLocation(shaderProgram, "u_Model"));
+        GL_CHECK(glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model)));
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
 
         glfwSwapBuffers(window);
 
@@ -203,6 +276,11 @@ int main()
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
     glfwTerminate();
     
     return 0;
