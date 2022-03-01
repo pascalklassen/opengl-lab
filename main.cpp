@@ -31,6 +31,8 @@ void CheckShaderInfoLog(GLuint shader)
 
 int main()
 {
+    auto t_start = std::chrono::high_resolution_clock::now();
+
     GLFWwindow* window;
 
     if (!glfwInit())
@@ -84,6 +86,7 @@ int main()
 
     GLfloat vertices[] =
     { //  X      Y      Z     R     G     B     U     V
+        /* Cube */
         -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
          0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
          0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
@@ -124,7 +127,14 @@ int main()
          0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
          0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
         -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        /* Floor */
+        -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+         1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+         1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+         1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
 
     GLuint indices[] =
@@ -162,11 +172,12 @@ int main()
         uniform mat4 u_Model;
         uniform mat4 u_View;
         uniform mat4 u_Proj;
+        uniform vec3 u_OverrideColor;
     
         void main()
         {
+            p_Color = u_OverrideColor * i_Color;
             p_TexCoord = i_TexCoord;
-            p_Color = i_Color;
             gl_Position = u_Proj * u_View * u_Model * vec4(i_Position, 1.0);
         }
     )glsl";
@@ -228,7 +239,7 @@ int main()
     GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img));
     stbi_image_free(img);
     GL_CHECK(GLint u_Kitten = glGetUniformLocation(shaderProgram, "u_Kitten"));
-    GL_CHECK(glUniform1i(u_Kitten, 0));
+    GL_CHECK( (u_Kitten, 0));
     /* Wrapping */
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
@@ -251,7 +262,7 @@ int main()
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
     glm::mat4 view = glm::lookAt(
-        glm::vec3{ 1.2f, 1.2f, 1.2f },
+        glm::vec3{ 2.5f, 2.5f, 2.5f },
         glm::vec3{ 0.0f, 0.0f, 0.0f },
         glm::vec3{ 0.0f, 0.0f, 1.0f }
     );
@@ -262,14 +273,18 @@ int main()
     GL_CHECK(GLint u_Proj = glGetUniformLocation(shaderProgram, "u_Proj"));
     GL_CHECK(glUniformMatrix4fv(u_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
 
-    auto t_start = std::chrono::high_resolution_clock::now();
+    
     bool showMetrics = false;
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        auto t_now = std::chrono::high_resolution_clock::now();
+        float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+
+        GL_CHECK(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
+        GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -277,9 +292,6 @@ int main()
 
         if (showMetrics)
             ImGui::ShowMetricsWindow(&showMetrics);
-
-        auto t_now = std::chrono::high_resolution_clock::now();
-        float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
 
         ImGui::BeginMainMenuBar();
         if (ImGui::Button("Metrics"))
@@ -294,24 +306,43 @@ int main()
         ImGui::Begin("Debug");
         ImGui::End();
 
+        /* Draw Cube */
         glm::mat4 model{ 1.0f };
-        model = glm::rotate(model, time * glm::radians(180.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
-        GL_CHECK(GLint u_Model = glGetUniformLocation(shaderProgram, "u_Model"));
-        GL_CHECK(glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model)));
-        
-        glm::mat4 view = glm::lookAt(
-            glm::vec3{ 1.2f, 1.2f, 1.2f },
-            glm::vec3{ 0.0f, 0.0f, 0.0f },
+        model = glm::rotate(
+            model,
+            time * glm::radians(180.0f),
             glm::vec3{ 0.0f, 0.0f, 1.0f }
         );
-        GL_CHECK(GLint u_View = glGetUniformLocation(shaderProgram, "u_View"));
-        GL_CHECK(glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view)));
+        GL_CHECK(GLint u_Model = glGetUniformLocation(shaderProgram, "u_Model"));
+        GL_CHECK(glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model)));
+        GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 36));
 
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
-        GL_CHECK(GLint u_Proj = glGetUniformLocation(shaderProgram, "u_Proj"));
-        GL_CHECK(glUniformMatrix4fv(u_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
+        /* Draw Floor */
+        GL_CHECK(glEnable(GL_STENCIL_TEST));
+        GL_CHECK(glStencilFunc(GL_ALWAYS, 1, 0xFF));
+        GL_CHECK(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
+        GL_CHECK(glStencilMask(0xFF));
+        GL_CHECK(glDepthMask(GL_FALSE));
+        GL_CHECK(glClear(GL_STENCIL_BUFFER_BIT));
+        GL_CHECK(glDrawArrays(GL_TRIANGLES, 36, 6));
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        /* Draw Cube Reflection */
+        GL_CHECK(glStencilFunc(GL_EQUAL, 1, 0xFF));
+        GL_CHECK(glStencilMask(0x00));
+        GL_CHECK(glDepthMask(GL_TRUE));
+
+        model = glm::scale(
+            glm::translate(model, glm::vec3{ 0, 0, -1 }),
+            glm::vec3{ 1, 1, -1 }
+        );
+        GL_CHECK(glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model)));
+        
+        GL_CHECK(GLuint u_OverrideColor = glGetUniformLocation(shaderProgram, "u_OverrideColor"));
+        GL_CHECK(glUniform3f(u_OverrideColor, 0.3f, 0.3f, 0.3f));
+        GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 36));
+        GL_CHECK(glUniform3f(u_OverrideColor, 1.0f, 1.0f, 1.0f));
+
+        GL_CHECK(glDisable(GL_STENCIL_TEST));
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         ImGui::Render();
