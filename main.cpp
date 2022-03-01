@@ -224,6 +224,7 @@ int main()
     GL_CHECK(glUniformMatrix4fv(u_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
 
     auto t_start = std::chrono::high_resolution_clock::now();
+    bool showMetrics = false;
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -235,15 +236,41 @@ int main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ShowDemoWindow();
+        if (showMetrics)
+            ImGui::ShowMetricsWindow(&showMetrics);
 
         auto t_now = std::chrono::high_resolution_clock::now();
         float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+
+        ImGui::BeginMainMenuBar();
+        if (ImGui::Button("Metrics"))
+            showMetrics = !showMetrics;
+        ImGui::Text((char*) glGetString(GL_VERSION));
+        ImGui::Separator();
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Separator();
+        ImGui::Text("Seconds since start: %.2fs", time);
+        ImGui::EndMainMenuBar();
+
+        ImGui::Begin("Debug");
+        ImGui::End();
 
         glm::mat4 model{ 1.0f };
         model = glm::rotate(model, time * glm::radians(180.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
         GL_CHECK(GLint u_Model = glGetUniformLocation(shaderProgram, "u_Model"));
         GL_CHECK(glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model)));
+        
+        glm::mat4 view = glm::lookAt(
+            glm::vec3{ 1.2f, 1.2f, 1.2f },
+            glm::vec3{ 0.0f, 0.0f, 0.0f },
+            glm::vec3{ 0.0f, 0.0f, 1.0f }
+        );
+        GL_CHECK(GLint u_View = glGetUniformLocation(shaderProgram, "u_View"));
+        GL_CHECK(glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view)));
+
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
+        GL_CHECK(GLint u_Proj = glGetUniformLocation(shaderProgram, "u_Proj"));
+        GL_CHECK(glUniformMatrix4fv(u_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
