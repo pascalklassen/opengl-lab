@@ -96,5 +96,11 @@
     <None Include="Fragment.glsl">
       <Filter>Resource Files\shader</Filter>
     </None>
+    <None Include="FrameBuffer_Vertex.glsl">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="FrameBuffer_Fragment.glsl">
+      <Filter>Resource Files\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

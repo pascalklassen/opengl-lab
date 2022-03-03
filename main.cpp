@@ -153,7 +153,7 @@ int main()
 
         vao.AddBuffer(vbo, layout);
 
-        lab::IndexBuffer ibo{ sizeof(indices), indices };
+        lab::IndexBuffer ibo{ 6, indices };
         ibo.Bind();
 
         lab::ShaderProgram program;
@@ -165,24 +165,10 @@ int main()
         program.Link();
         program.Bind();
         
-        GL_CHECK(glActiveTexture(GL_TEXTURE0));
-        lab::Texture kitten{ "sample.png" };
-        /* Wrapping */
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        /* Filtering */
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        lab::Texture kitten{ "sample.png", GL_TEXTURE0 };
         program.SetUniform1i("u_Kitten", 0);
         
-        GL_CHECK(glActiveTexture(GL_TEXTURE1));
-        lab::Texture puppy{ "sample2.png" };
-        /* Wrapping */
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        /* Filtering */
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        lab::Texture puppy{ "sample2.png", GL_TEXTURE1 };
         program.SetUniform1i("u_Puppy", 1);
 
         glm::mat4 view = glm::lookAt(
@@ -195,7 +181,7 @@ int main()
         glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
         program.SetUniformMatrix4fv("u_Proj", proj);
 
-        /*GLuint fbo;
+        GLuint fbo;
         GL_CHECK(glGenFramebuffers(1, &fbo));
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
 
@@ -213,7 +199,39 @@ int main()
         GL_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, rbo));
         GL_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600));
 
-        GL_CHECK(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH24_STENCIL8, GL_RENDERBUFFER, rbo));*/
+        GL_CHECK(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo));
+        ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+
+        GLfloat fvertices[] =
+        {
+             1.0f,  1.0f, 1.0f, 1.0f,
+            -1.0f,  1.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f,
+             1.0f, -1.0f, 1.0f, 0.0f,
+             1.0f,  1.0f, 1.0f, 1.0f
+        };
+
+        lab::VertexArray fvao;
+        fvao.Bind();
+
+        lab::VertexBuffer fvbo{ sizeof(fvertices), fvertices };
+        fvbo.Bind();
+
+        lab::VertexBufferLayout flayout;
+        flayout.Push<GLfloat>(2);
+        flayout.Push<GLfloat>(2);
+
+        fvao.AddBuffer(fvbo, flayout);
+
+        lab::VertexShader fvs{ "FrameBuffer_Vertex.glsl" };
+        lab::FragmentShader ffs{ "FrameBuffer_Fragment.glsl" };
+        lab::ShaderProgram fprogram;
+        fprogram.AttachShader(fvs);
+        fprogram.AttachShader(ffs);
+        fprogram.Link();
+        fprogram.Bind();
+        fprogram.SetUniform1i("u_FrameBuffer", 0);
 
         bool showMetrics = false;
         while (!glfwWindowShouldClose(window))
@@ -223,9 +241,6 @@ int main()
 
             auto t_now = std::chrono::high_resolution_clock::now();
             float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
-
-            GL_CHECK(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
-            GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -237,7 +252,7 @@ int main()
             ImGui::BeginMainMenuBar();
             if (ImGui::Button("Metrics"))
                 showMetrics = !showMetrics;
-            ImGui::Text((char*)glGetString(GL_VERSION));
+            ImGui::Text((char*) glGetString(GL_VERSION));
             ImGui::Separator();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::Separator();
@@ -246,6 +261,18 @@ int main()
 
             ImGui::Begin("Debug");
             ImGui::End();
+
+            /* FrameBuffer Begin */
+            GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
+
+            GL_CHECK(glEnable(GL_DEPTH_TEST));
+            vao.Bind();
+            program.Bind();
+            kitten.Bind();
+            puppy.Bind();
+
+            GL_CHECK(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
+            GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
             /* Draw Cube */
             glm::mat4 model{ 1.0f };
@@ -282,7 +309,22 @@ int main()
             program.SetUniform3f("u_OverrideColor", { 1.0f, 1.0f, 1.0f });
 
             GL_CHECK(glDisable(GL_STENCIL_TEST));
-            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            /* FrameBuffer End */
+            GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+            fvao.Bind();
+            GL_CHECK(glDisable(GL_DEPTH_TEST));
+            fprogram.Bind();
+            GL_CHECK(glActiveTexture(GL_TEXTURE0));
+            GL_CHECK(glBindTexture(GL_TEXTURE_2D, texColBuffer));
+            GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
+
+            ImGui::Begin("Scene");
+            ImGui::BeginChild("Renderer");
+            ImVec2 wsize = ImGui::GetWindowSize();
+            ImGui::Image((ImTextureID) texColBuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::EndChild();
+            ImGui::End();
 
             ImGui::Render();
             int display_w, display_h;
@@ -303,10 +345,10 @@ int main()
 
             glfwPollEvents();
         }
-    }
 
-    /*GL_CHECK(glDeleteRenderbuffers(1, &rbo));
-    GL_CHECK(glDeleteFramebuffers(1, &fbo));*/
+        GL_CHECK(glDeleteRenderbuffers(1, &rbo));
+        GL_CHECK(glDeleteFramebuffers(1, &fbo));
+    }
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

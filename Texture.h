@@ -9,10 +9,15 @@ namespace lab
     class Texture
     {
     private:
+        static bool flip;
+
         GLsizei m_Width, m_Height;
         GLuint m_Handle;
+        GLenum m_Slot;
     public:
-        Texture(const std::string& filepath, bool flip = false);
+        static void SetFlip(bool flip) { Texture::flip = flip; }
+
+        Texture(const std::string& filepath, GLenum slot = GL_TEXTURE0);
         ~Texture();
         void Bind() const;
         void Unbind() const;

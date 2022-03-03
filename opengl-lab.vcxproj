@@ -162,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Fragment.glsl" />
+    <None Include="FrameBuffer_Fragment.glsl" />
+    <None Include="FrameBuffer_Vertex.glsl" />
     <None Include="Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

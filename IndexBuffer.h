@@ -8,10 +8,12 @@ namespace lab
     {
     private:
         GLuint m_Handle;
+        GLuint m_Count;
     public:
-        IndexBuffer(GLsizeiptr size, const void* data, GLenum usage = GL_STATIC_DRAW);
+        IndexBuffer(GLuint count, const GLuint* data, GLenum usage = GL_STATIC_DRAW);
         ~IndexBuffer();
         void Bind() const;
         void Unbind() const;
+        GLuint GetCount() const { return m_Count; }
     };
 }

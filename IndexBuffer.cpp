@@ -7,12 +7,12 @@
 namespace lab
 {
 
-    IndexBuffer::IndexBuffer(GLsizeiptr size, const void* data, GLenum usage /*= GL_STATIC_DRAW*/)
+    IndexBuffer::IndexBuffer(GLuint count, const GLuint* data, GLenum usage /*= GL_STATIC_DRAW*/)
         : m_Handle{ 0 }
     {
         GL_CHECK(glGenBuffers(1, &m_Handle));
         Bind();
-        GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+        GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLuint), data, GL_STATIC_DRAW));
         Unbind();
     }
 
