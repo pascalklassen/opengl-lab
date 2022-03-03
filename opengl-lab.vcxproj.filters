@@ -22,7 +22,16 @@
     <Filter Include="Source Files\util">
       <UniqueIdentifier>{a3692e2e-9cd8-44bc-99af-5f2648048427}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\images">
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{bad365b4-c44a-4bf8-94dd-a95639b74505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{38250145-afc7-4cf0-84b1-30f9e465515f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shader">
+      <UniqueIdentifier>{bf9f9913-4415-49a6-94dd-49123eed13d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\image">
       <UniqueIdentifier>{8c02da42-5baf-4fb0-abe0-bb08de3d8838}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -36,18 +45,56 @@
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
       <Filter>Header Files\debug</Filter>
     </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="sample.png">
-      <Filter>Resource Files\images</Filter>
+      <Filter>Resource Files\image</Filter>
     </Image>
     <Image Include="sample2.png">
-      <Filter>Resource Files\images</Filter>
+      <Filter>Resource Files\image</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Vertex.glsl">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="Fragment.glsl">
+      <Filter>Resource Files\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
