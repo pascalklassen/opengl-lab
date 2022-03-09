@@ -34,6 +34,12 @@
     <Filter Include="Resource Files\image">
       <UniqueIdentifier>{8c02da42-5baf-4fb0-abe0-bb08de3d8838}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\scene">
+      <UniqueIdentifier>{19b03976-e2f0-4731-8ce4-b7e2978b4a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\scene">
+      <UniqueIdentifier>{bc67392c-97c0-40c5-b9ae-3732773767e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,6 +66,12 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\core\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\core\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -80,12 +92,24 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\core\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\core\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="sample.png">
       <Filter>Resource Files\image</Filter>
     </Image>
     <Image Include="sample2.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="awesomeface.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="container.jpg">
       <Filter>Resource Files\image</Filter>
     </Image>
   </ItemGroup>

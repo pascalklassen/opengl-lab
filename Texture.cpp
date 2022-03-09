@@ -9,7 +9,7 @@
 
 namespace lab
 {
-    bool Texture::flip = false;
+    bool Texture::flip = true;
 
     Texture::Texture(const std::string& filepath, GLenum slot /*= GL_TEXTURE0*/)
         : m_Slot{ slot }

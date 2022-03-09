@@ -17,6 +17,7 @@
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera.h"
 
 #include "Debug.h"
 
@@ -76,56 +77,63 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
 
     GLfloat vertices[] =
-    { //  X      Y      Z     R     G     B     U     V
+    { //  X      Y      Z      S     T
         /* Cube */
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        /* Floor */
-        -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-         1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-         1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-         1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-        -1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+    glm::vec3 positions[] =
+    {
+        {  0.0f,  0.0f,  0.0f },
+        {  2.0f,  5.0f, -15.0f },
+        { -1.5f, -2.2f, -2.5f },
+        { -3.8f, -2.0f, -12.3f },
+        {  2.4f, -0.4f, -3.5f },
+        { -1.7f,  3.0f, -7.5f },
+        {  1.3f, -2.0f, -2.5f },
+        {  1.5f,  2.0f, -2.5f },
+        {  1.5f,  0.2f, -1.5f },
+        { -1.3f,  1.0f, -1.5f }
     };
 
     GLuint indices[] =
@@ -146,8 +154,6 @@ int main()
         lab::VertexBufferLayout layout;
         /* Position */
         layout.Push<GLfloat>(3);
-        /* Color */
-        layout.Push<GLfloat>(3);
         /* Texture */
         layout.Push<GLfloat>(2);
 
@@ -165,20 +171,16 @@ int main()
         program.Link();
         program.Bind();
         
-        lab::Texture kitten{ "sample.png", GL_TEXTURE0 };
-        program.SetUniform1i("u_Kitten", 0);
+        lab::Texture container{ "container.jpg", GL_TEXTURE0 };
+        program.SetUniform1i("u_Container", 0);
         
-        lab::Texture puppy{ "sample2.png", GL_TEXTURE1 };
-        program.SetUniform1i("u_Puppy", 1);
+        lab::Texture face{ "awesomeface.png", GL_TEXTURE1 };
+        program.SetUniform1i("u_Face", 1);
 
-        glm::mat4 view = glm::lookAt(
-            glm::vec3{ 2.5f, 2.5f, 2.5f },
-            glm::vec3{ 0.0f, 0.0f, 0.0f },
-            glm::vec3{ 0.0f, 0.0f, 1.0f }
-        );
-        program.SetUniformMatrix4fv("u_View", view);
+        lab::Camera camera{ { 0.0f, 0.0f, 3.0f } };
+        program.SetUniformMatrix4fv("u_View", camera.GetView());
 
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
+        glm::mat4 proj = glm::perspective(glm::radians(camera.GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
         program.SetUniformMatrix4fv("u_Proj", proj);
 
         GLuint fbo;
@@ -234,6 +236,9 @@ int main()
         fprogram.SetUniform1i("u_FrameBuffer", 0);
 
         bool showMetrics = false;
+
+        float deltaTime = 0.0f;
+        float lastFrame = 0.0f;
         while (!glfwWindowShouldClose(window))
         {
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -241,6 +246,10 @@ int main()
 
             auto t_now = std::chrono::high_resolution_clock::now();
             float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+
+            float currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -256,7 +265,7 @@ int main()
             ImGui::Separator();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::Separator();
-            ImGui::Text("Seconds since start: %.2fs", time);
+            ImGui::Text("Delta Time: %.4fs", deltaTime);
             ImGui::EndMainMenuBar();
 
             ImGui::Begin("Debug");
@@ -268,47 +277,32 @@ int main()
             GL_CHECK(glEnable(GL_DEPTH_TEST));
             vao.Bind();
             program.Bind();
-            kitten.Bind();
-            puppy.Bind();
+            container.Bind();
+            face.Bind();
 
-            GL_CHECK(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
+            GL_CHECK(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
             GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-            /* Draw Cube */
-            glm::mat4 model{ 1.0f };
-            model = glm::rotate(
-                model,
-                time * glm::radians(180.0f),
-                glm::vec3{ 0.0f, 0.0f, 1.0f }
-            );
-            program.SetUniformMatrix4fv("u_Model", model);
-            GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 36));
+            camera.OnUpdate(deltaTime);
+            camera.OnRender();
+            camera.OnGui();
+            program.SetUniformMatrix4fv("u_View", camera.GetView());
 
-            /* Draw Floor */
-            GL_CHECK(glEnable(GL_STENCIL_TEST));
-            GL_CHECK(glStencilFunc(GL_ALWAYS, 1, 0xFF));
-            GL_CHECK(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
-            GL_CHECK(glStencilMask(0xFF));
-            GL_CHECK(glDepthMask(GL_FALSE));
-            GL_CHECK(glClear(GL_STENCIL_BUFFER_BIT));
-            GL_CHECK(glDrawArrays(GL_TRIANGLES, 36, 6));
+            proj = glm::perspective(glm::radians(camera.GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
+            program.SetUniformMatrix4fv("u_Proj", proj);
 
-            /* Draw Cube Reflection */
-            GL_CHECK(glStencilFunc(GL_EQUAL, 1, 0xFF));
-            GL_CHECK(glStencilMask(0x00));
-            GL_CHECK(glDepthMask(GL_TRUE));
+            /* Draw Cubes */
+            for (int i = 0; i < 10; i++)
+            {
+                // calculate the model matrix for each object and pass it to shader before drawing
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, positions[i]);
+                float angle = 20.0f * i;
+                model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+                program.SetUniformMatrix4fv("u_Model", model);
 
-            model = glm::scale(
-                glm::translate(model, glm::vec3{ 0, 0, -1 }),
-                glm::vec3{ 1, 1, -1 }
-            );
-            program.SetUniformMatrix4fv("u_Model", model);
-
-            program.SetUniform3f("u_OverrideColor", { 0.3f, 0.3f, 0.3f });
-            GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 36));
-            program.SetUniform3f("u_OverrideColor", { 1.0f, 1.0f, 1.0f });
-
-            GL_CHECK(glDisable(GL_STENCIL_TEST));
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+            }
 
             /* FrameBuffer End */
             GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
