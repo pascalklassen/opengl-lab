@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\debug">
-      <UniqueIdentifier>{623d1758-2958-4bc2-8e27-b6bdc20b69d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\debug">
-      <UniqueIdentifier>{588d4a37-9435-4f27-8c06-4a102a359b61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\util">
       <UniqueIdentifier>{a3692e2e-9cd8-44bc-99af-5f2648048427}</UniqueIdentifier>
     </Filter>
@@ -40,13 +34,25 @@
     <Filter Include="Source Files\core\scene">
       <UniqueIdentifier>{bc67392c-97c0-40c5-b9ae-3732773767e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\debug">
+      <UniqueIdentifier>{26871129-7f2b-491e-9c73-6c683c061f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\debug">
+      <UniqueIdentifier>{623d1758-2958-4bc2-8e27-b6bdc20b69d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\test">
+      <UniqueIdentifier>{03232280-97bf-4d67-8f33-93591f964339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{77cf095a-756f-4d22-acf4-fc000999f3ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
-      <Filter>Source Files\debug</Filter>
+      <Filter>Source Files\core\debug</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files\util</Filter>
@@ -72,11 +78,20 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\core\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneRenderer.cpp">
+      <Filter>Source Files\core\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files\debug</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -97,6 +112,21 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\core\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\core\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\core\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneRenderer.h">
+      <Filter>Header Files\core\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

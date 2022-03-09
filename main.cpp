@@ -1,6 +1,5 @@
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -12,14 +11,8 @@
 #include <string>
 #include <chrono>
 
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Camera.h"
-
-#include "Debug.h"
+#include "core.h"
+#include "TestScene.h"
 
 int main()
 {
@@ -76,113 +69,7 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    GLfloat vertices[] =
-    { //  X      Y      Z      S     T
-        /* Cube */
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-
-    glm::vec3 positions[] =
     {
-        {  0.0f,  0.0f,  0.0f },
-        {  2.0f,  5.0f, -15.0f },
-        { -1.5f, -2.2f, -2.5f },
-        { -3.8f, -2.0f, -12.3f },
-        {  2.4f, -0.4f, -3.5f },
-        { -1.7f,  3.0f, -7.5f },
-        {  1.3f, -2.0f, -2.5f },
-        {  1.5f,  2.0f, -2.5f },
-        {  1.5f,  0.2f, -1.5f },
-        { -1.3f,  1.0f, -1.5f }
-    };
-
-    GLuint indices[] =
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    GL_CHECK(glEnable(GL_DEPTH_TEST));
-
-    {
-        lab::VertexArray vao;
-        vao.Bind();
-
-        lab::VertexBuffer vbo{ sizeof(vertices), vertices };
-        vbo.Bind();
-
-        lab::VertexBufferLayout layout;
-        /* Position */
-        layout.Push<GLfloat>(3);
-        /* Texture */
-        layout.Push<GLfloat>(2);
-
-        vao.AddBuffer(vbo, layout);
-
-        lab::IndexBuffer ibo{ 6, indices };
-        ibo.Bind();
-
-        lab::ShaderProgram program;
-        lab::VertexShader vs{ "Vertex.glsl" };
-        lab::FragmentShader fs{ "Fragment.glsl" };
-
-        program.AttachShader(vs);
-        program.AttachShader(fs);
-        program.Link();
-        program.Bind();
-        
-        lab::Texture container{ "container.jpg", GL_TEXTURE0 };
-        program.SetUniform1i("u_Container", 0);
-        
-        lab::Texture face{ "awesomeface.png", GL_TEXTURE1 };
-        program.SetUniform1i("u_Face", 1);
-
-        lab::Camera camera{ { 0.0f, 0.0f, 3.0f } };
-        program.SetUniformMatrix4fv("u_View", camera.GetView());
-
-        glm::mat4 proj = glm::perspective(glm::radians(camera.GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
-        program.SetUniformMatrix4fv("u_Proj", proj);
-
         GLuint fbo;
         GL_CHECK(glGenFramebuffers(1, &fbo));
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
@@ -235,6 +122,10 @@ int main()
         fprogram.Bind();
         fprogram.SetUniform1i("u_FrameBuffer", 0);
 
+        lab::SceneRenderer renderer;
+        lab::Ref<lab::TestScene> test = lab::MakeRef<lab::TestScene>();
+        renderer.Render(test);
+
         bool showMetrics = false;
 
         float deltaTime = 0.0f;
@@ -243,9 +134,6 @@ int main()
         {
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwSetWindowShouldClose(window, GL_TRUE);
-
-            auto t_now = std::chrono::high_resolution_clock::now();
-            float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
 
             float currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrame;
@@ -274,35 +162,9 @@ int main()
             /* FrameBuffer Begin */
             GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
 
-            GL_CHECK(glEnable(GL_DEPTH_TEST));
-            vao.Bind();
-            program.Bind();
-            container.Bind();
-            face.Bind();
-
-            GL_CHECK(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
-            GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-            camera.OnUpdate(deltaTime);
-            camera.OnRender();
-            camera.OnGui();
-            program.SetUniformMatrix4fv("u_View", camera.GetView());
-
-            proj = glm::perspective(glm::radians(camera.GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
-            program.SetUniformMatrix4fv("u_Proj", proj);
-
-            /* Draw Cubes */
-            for (int i = 0; i < 10; i++)
-            {
-                // calculate the model matrix for each object and pass it to shader before drawing
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, positions[i]);
-                float angle = 20.0f * i;
-                model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                program.SetUniformMatrix4fv("u_Model", model);
-
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-            }
+            renderer.OnUpdate(deltaTime);
+            renderer.OnRender();
+            renderer.OnGui();
 
             /* FrameBuffer End */
             GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));

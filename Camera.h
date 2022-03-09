@@ -26,13 +26,12 @@ namespace lab
         float m_LastY;
     public:
         Camera(const glm::vec3& position, const glm::vec3& target = { 0.0f, 0.0f, 0.0f });
+        ~Camera()
+        {
+        }
 
         void OnUpdate(float deltaTime) override;
-
-
         void OnRender() override;
-
-
         void OnGui() override;
 
         glm::mat4 GetView() const { return m_View; }
