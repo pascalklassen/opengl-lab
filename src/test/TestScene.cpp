@@ -1,16 +1,16 @@
 #include "TestScene.h"
 
-#include "core.h"
+#include "../core/core.h"
 
 namespace lab
 {
     TestScene::TestScene()
-        : Scene(),  m_Model{ 1.0f }, m_View{ 1.0f }, m_Proj{ 1.0f }
+        : Layer(),  m_Model{ 1.0f }, m_View{ 1.0f }, m_Proj{ 1.0f }
     {
         m_VertexArray = MakeRef<VertexArray>();
         m_VertexArray->Bind();
 
-        m_VertexBuffer = MakeRef<VertexBuffer>( sizeof(vertices), vertices );
+        m_VertexBuffer = MakeRef<VertexBuffer>(sizeof(vertices), vertices);
         m_VertexBuffer->Bind();
 
         lab::VertexBufferLayout layout;
@@ -20,8 +20,8 @@ namespace lab
         layout.Push<GLfloat>(2);
         m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
-        lab::VertexShader vs{ "Vertex.glsl" };
-        lab::FragmentShader fs{ "Fragment.glsl" };
+        lab::VertexShader vs{ "resources/shaders/Vertex.glsl" };
+        lab::FragmentShader fs{ "resources/shaders/Fragment.glsl" };
 
         m_Shader = MakeRef<ShaderProgram>();
         m_Shader->AttachShader(vs);
@@ -29,8 +29,11 @@ namespace lab
         m_Shader->Link();
         m_Shader->Bind();
 
-        m_Container = MakeRef<Texture>("container.jpg", GL_TEXTURE0);
-        m_Face = MakeRef<Texture>("awesomeface.png", GL_TEXTURE1);
+        m_Container = MakeRef<Texture>("resources/images/container.jpg", GL_TEXTURE0);
+        m_Face = MakeRef<Texture>("resources/images/awesomeface.png", GL_TEXTURE1);
+
+        m_Shader->SetUniform1i("u_Container", 0);
+        m_Shader->SetUniform1i("u_Face", 1);
 
         m_Camera = MakeRef<Camera>(glm::vec3{ 0.0f, 0.0f, 3.0f });
         Add(m_Camera);
@@ -39,7 +42,7 @@ namespace lab
 
     void TestScene::OnUpdate(float deltaTime)
     {
-        Scene::OnUpdate(deltaTime);
+        Layer::OnUpdate(deltaTime);
         
         m_Proj = glm::perspective(glm::radians(m_Camera->GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
         m_Shader->SetUniformMatrix4fv("u_Proj", m_Proj);
@@ -48,7 +51,7 @@ namespace lab
 
     void TestScene::OnRender()
     {
-        Scene::OnRender();
+        Layer::OnRender();
 
         GL_CHECK(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
         GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -74,6 +77,6 @@ namespace lab
 
     void TestScene::OnGui()
     {
-        Scene::OnGui();
+        Layer::OnGui();
     }
 }

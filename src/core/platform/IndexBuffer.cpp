@@ -2,7 +2,7 @@
 
 #include <gl/glew.h>
 
-#include "Debug.h"
+#include "../debug/debug.h"
 
 namespace lab
 {

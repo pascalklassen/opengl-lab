@@ -6,11 +6,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
-#include "core.h"
+#include "../core/core.h"
 
 namespace lab
 {
-    class TestScene : public Scene
+    class TestScene : public Layer
     {
     private:
         static constexpr GLfloat vertices[] =

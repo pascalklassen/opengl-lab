@@ -2,21 +2,22 @@
 
 #include <vector>
 
-#include "core.h"
+#include "../memory/memory.h"
+#include "Entity.h"
 
 namespace lab
 {
-    class Scene : public Component
+    class Layer : public Entity
     {
     private:
-        std::vector<Ref<Component>> m_Components;
+        std::vector<Ref<Entity>> m_Entities;
     public:
-        Scene();
-        ~Scene()
+        Layer();
+        ~Layer()
         {
         }
 
-        void Add(const Ref<Component>& component);
+        void Add(const Ref<Entity>& entity);
 
         virtual void OnUpdate(float deltaTime) override;
         virtual void OnRender() override;

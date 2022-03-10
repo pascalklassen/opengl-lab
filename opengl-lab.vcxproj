@@ -141,46 +141,54 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="core.cpp" />
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneRenderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="TestScene.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="VertexArray.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="src\core\scene\Camera.cpp" />
+    <ClCompile Include="src\core\scene\Entity.cpp" />
+    <ClCompile Include="src\core\core.cpp" />
+    <ClCompile Include="src\core\debug\debug.cpp" />
+    <ClCompile Include="src\core\platform\IndexBuffer.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\core\memory\ref.cpp" />
+    <ClCompile Include="src\core\scene\Layer.cpp" />
+    <ClCompile Include="src\core\scene\LayerRenderer.cpp" />
+    <ClCompile Include="src\core\memory\scope.cpp" />
+    <ClCompile Include="src\core\platform\Shader.cpp" />
+    <ClCompile Include="src\core\vendor\stb_image.cpp" />
+    <ClCompile Include="src\test\TestScene.cpp" />
+    <ClCompile Include="src\core\platform\Texture.cpp" />
+    <ClCompile Include="src\core\platform\VertexArray.cpp" />
+    <ClCompile Include="src\core\platform\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="core.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneRenderer.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="VertexArray.h" />
-    <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="src\core\scene\scene.h" />
+    <ClInclude Include="src\core\memory\memory.h" />
+    <ClInclude Include="src\core\platform\platform.h" />
+    <ClInclude Include="src\core\scene\Camera.h" />
+    <ClInclude Include="src\core\scene\Entity.h" />
+    <ClInclude Include="src\core\core.h" />
+    <ClInclude Include="src\core\debug\debug.h" />
+    <ClInclude Include="src\core\platform\IndexBuffer.h" />
+    <ClInclude Include="src\core\memory\ref.h" />
+    <ClInclude Include="src\core\scene\Layer.h" />
+    <ClInclude Include="src\core\scene\LayerRenderer.h" />
+    <ClInclude Include="src\core\memory\scope.h" />
+    <ClInclude Include="src\core\platform\Shader.h" />
+    <ClInclude Include="src\core\vendor\vendor.h" />
+    <ClInclude Include="src\test\TestScene.h" />
+    <ClInclude Include="src\core\platform\Texture.h" />
+    <ClInclude Include="src\core\platform\VertexArray.h" />
+    <ClInclude Include="src\core\platform\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="awesomeface.png" />
-    <Image Include="container.jpg" />
-    <Image Include="sample.png" />
-    <Image Include="sample2.png" />
+    <Image Include="resources\images\awesomeface.png" />
+    <Image Include="resources\images\container.jpg" />
+    <Image Include="resources\images\sample.png" />
+    <Image Include="resources\images\sample2.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fragment.glsl" />
-    <None Include="FrameBuffer_Fragment.glsl" />
-    <None Include="FrameBuffer_Vertex.glsl" />
-    <None Include="Vertex.glsl" />
+    <None Include="resources\shaders\Fragment.glsl" />
+    <None Include="resources\shaders\FrameBuffer_Fragment.glsl" />
+    <None Include="resources\shaders\FrameBuffer_Vertex.glsl" />
+    <None Include="resources\shaders\Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

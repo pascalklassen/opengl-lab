@@ -1,22 +1,23 @@
 #pragma once
 
-#include "core.h"
+#include "../memory/memory.h"
+#include "Layer.h"
 
 namespace lab
 {
-    class SceneRenderer : public Component
+    class LayerRenderer : public Entity
     {
     private:
-        Ref<Scene> m_Current;
+        Ref<Layer> m_Current;
     public:
-        SceneRenderer()
+        LayerRenderer()
         {
         }
-        ~SceneRenderer()
+        ~LayerRenderer()
         {
         }
 
-        void Render(const Ref<Scene>& scene);
+        void Render(const Ref<Layer>& scene);
 
         virtual void OnUpdate(float deltaTime) override;
         virtual void OnRender() override;

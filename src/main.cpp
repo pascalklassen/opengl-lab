@@ -11,8 +11,8 @@
 #include <string>
 #include <chrono>
 
-#include "core.h"
-#include "TestScene.h"
+#include "core/core.h"
+#include "test/TestScene.h"
 
 int main()
 {
@@ -113,8 +113,8 @@ int main()
 
         fvao.AddBuffer(fvbo, flayout);
 
-        lab::VertexShader fvs{ "FrameBuffer_Vertex.glsl" };
-        lab::FragmentShader ffs{ "FrameBuffer_Fragment.glsl" };
+        lab::VertexShader fvs{ "resources/shaders/FrameBuffer_Vertex.glsl" };
+        lab::FragmentShader ffs{ "resources/shaders/FrameBuffer_Fragment.glsl" };
         lab::ShaderProgram fprogram;
         fprogram.AttachShader(fvs);
         fprogram.AttachShader(ffs);
@@ -122,7 +122,7 @@ int main()
         fprogram.Bind();
         fprogram.SetUniform1i("u_FrameBuffer", 0);
 
-        lab::SceneRenderer renderer;
+        lab::LayerRenderer renderer;
         lab::Ref<lab::TestScene> test = lab::MakeRef<lab::TestScene>();
         renderer.Render(test);
 

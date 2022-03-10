@@ -2,11 +2,11 @@
 
 #include <glm/glm.hpp>
 
-#include "Component.h"
+#include "Entity.h"
 
 namespace lab
 {
-    class Camera : public Component
+    class Camera : public Entity
     {
     private:
         const static glm::vec3 front;

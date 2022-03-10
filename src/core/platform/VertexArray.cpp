@@ -2,7 +2,8 @@
 
 #include <gl/glew.h>
 
-#include "Debug.h"
+#include "../debug/debug.h"
+#include "VertexBuffer.h"
 
 namespace lab
 {

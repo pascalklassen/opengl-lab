@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "Debug.h"
+#include "../debug/debug.h"
 
 namespace lab
 {

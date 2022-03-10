@@ -2,7 +2,7 @@
 
 namespace lab
 {
-    class Component
+    class Entity
     {
     public:
         virtual void OnUpdate(float deltaTime) = 0;

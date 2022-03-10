@@ -22,12 +22,6 @@
     <Filter Include="Source Files\core">
       <UniqueIdentifier>{38250145-afc7-4cf0-84b1-30f9e465515f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\shader">
-      <UniqueIdentifier>{bf9f9913-4415-49a6-94dd-49123eed13d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\image">
-      <UniqueIdentifier>{8c02da42-5baf-4fb0-abe0-bb08de3d8838}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\core\scene">
       <UniqueIdentifier>{19b03976-e2f0-4731-8ce4-b7e2978b4a61}</UniqueIdentifier>
     </Filter>
@@ -46,115 +40,151 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{77cf095a-756f-4d22-acf4-fc000999f3ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\memory">
+      <UniqueIdentifier>{64c6ef8a-945d-493d-93b0-14aa91c50a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\memory">
+      <UniqueIdentifier>{d549a147-2051-458f-a0db-f811c34ad890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{bf9f9913-4415-49a6-94dd-49123eed13d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{8c02da42-5baf-4fb0-abe0-bb08de3d8838}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp">
+    <ClCompile Include="src\core\debug\debug.cpp">
       <Filter>Source Files\core\debug</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.cpp">
+    <ClCompile Include="src\core\vendor\stb_image.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
+    <ClCompile Include="src\core\platform\VertexBuffer.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
+    <ClCompile Include="src\core\platform\IndexBuffer.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
+    <ClCompile Include="src\core\platform\VertexArray.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="src\core\platform\Shader.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="src\core\platform\Texture.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="src\core\scene\Entity.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\core\scene\Camera.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="src\core\scene\Layer.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneRenderer.cpp">
+    <ClCompile Include="src\core\scene\LayerRenderer.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
+    <ClCompile Include="src\test\TestScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core.cpp">
+    <ClCompile Include="src\core\core.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\memory\scope.cpp">
+      <Filter>Source Files\core\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\memory\ref.cpp">
+      <Filter>Source Files\core\memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="VertexBuffer.h">
+    <ClInclude Include="src\core\platform\VertexBuffer.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
+    <ClInclude Include="src\core\platform\IndexBuffer.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="VertexArray.h">
+    <ClInclude Include="src\core\platform\VertexArray.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="src\core\platform\Shader.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="src\core\platform\Texture.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="src\core\scene\Entity.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="src\core\scene\Camera.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="src\core\scene\Layer.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
-    <ClInclude Include="core.h">
+    <ClInclude Include="src\core\core.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
+    <ClInclude Include="src\core\debug\debug.h">
       <Filter>Header Files\core\debug</Filter>
     </ClInclude>
-    <ClInclude Include="SceneRenderer.h">
+    <ClInclude Include="src\core\scene\LayerRenderer.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
+    <ClInclude Include="src\test\TestScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\memory\ref.h">
+      <Filter>Header Files\core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\memory\scope.h">
+      <Filter>Header Files\core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\memory\memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\platform\platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\scene\scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\vendor\vendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="sample.png">
-      <Filter>Resource Files\image</Filter>
+    <Image Include="src\resources\images\sample.png">
+      <Filter>Resource Files\images</Filter>
     </Image>
-    <Image Include="sample2.png">
-      <Filter>Resource Files\image</Filter>
+    <Image Include="src\resources\images\sample2.png">
+      <Filter>Resource Files\images</Filter>
     </Image>
-    <Image Include="awesomeface.png">
-      <Filter>Resource Files\image</Filter>
+    <Image Include="src\resources\images\awesomeface.png">
+      <Filter>Resource Files\images</Filter>
     </Image>
-    <Image Include="container.jpg">
-      <Filter>Resource Files\image</Filter>
+    <Image Include="src\resources\images\container.jpg">
+      <Filter>Resource Files\images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Vertex.glsl">
-      <Filter>Resource Files\shader</Filter>
+    <None Include="src\resources\shaders\Vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="Fragment.glsl">
-      <Filter>Resource Files\shader</Filter>
+    <None Include="src\resources\shaders\Fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="FrameBuffer_Vertex.glsl">
-      <Filter>Resource Files\shader</Filter>
+    <None Include="src\resources\shaders\FrameBuffer_Vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="FrameBuffer_Fragment.glsl">
-      <Filter>Resource Files\shader</Filter>
+    <None Include="src\resources\shaders\FrameBuffer_Fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>
