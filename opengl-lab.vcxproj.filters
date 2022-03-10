@@ -52,6 +52,9 @@
     <Filter Include="Resource Files\images">
       <UniqueIdentifier>{8c02da42-5baf-4fb0-abe0-bb08de3d8838}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\test">
+      <UniqueIdentifier>{1a69204d-7b60-47e6-b068-0a2330a0bb4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -84,23 +87,20 @@
     <ClCompile Include="src\core\scene\Camera.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\scene\Layer.cpp">
+    <ClCompile Include="src\core\scene\Scene.cpp">
       <Filter>Source Files\core\scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\scene\LayerRenderer.cpp">
+    <ClCompile Include="src\core\scene\SceneRenderer.cpp">
       <Filter>Source Files\core\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\test\TestScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\core.cpp">
-      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\memory\scope.cpp">
       <Filter>Source Files\core\memory</Filter>
     </ClCompile>
     <ClCompile Include="src\core\memory\ref.cpp">
       <Filter>Source Files\core\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\test\TestScene.cpp">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +125,7 @@
     <ClInclude Include="src\core\scene\Camera.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\scene\Layer.h">
+    <ClInclude Include="src\core\scene\Scene.h">
       <Filter>Header Files\core\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\core\core.h">
@@ -134,11 +134,8 @@
     <ClInclude Include="src\core\debug\debug.h">
       <Filter>Header Files\core\debug</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\scene\LayerRenderer.h">
+    <ClInclude Include="src\core\scene\SceneRenderer.h">
       <Filter>Header Files\core\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\test\TestScene.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\memory\ref.h">
       <Filter>Header Files\core\memory</Filter>
@@ -146,45 +143,43 @@
     <ClInclude Include="src\core\memory\scope.h">
       <Filter>Header Files\core\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\memory\memory.h">
+    <ClInclude Include="src\core\memory\_includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\platform\platform.h">
+    <ClInclude Include="src\core\platform\_includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\scene\scene.h">
+    <ClInclude Include="src\core\scene\_includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\vendor\vendor.h">
+    <ClInclude Include="src\core\vendor\_includes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\test\TestScene.h">
+      <Filter>Header Files\core\test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\debug\_includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\resources\images\sample.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="resources\images\awesomeface.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\resources\images\sample2.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="resources\images\container.jpg">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\resources\images\awesomeface.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="resources\images\sample.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="src\resources\images\container.jpg">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="resources\images\sample2.png">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\resources\shaders\Vertex.glsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="src\resources\shaders\Fragment.glsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="src\resources\shaders\FrameBuffer_Vertex.glsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="src\resources\shaders\FrameBuffer_Fragment.glsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
+    <None Include="resources\shaders\Fragment.glsl" />
+    <None Include="resources\shaders\FrameBuffer_Fragment.glsl" />
+    <None Include="resources\shaders\FrameBuffer_Vertex.glsl" />
+    <None Include="resources\shaders\Vertex.glsl" />
   </ItemGroup>
 </Project>

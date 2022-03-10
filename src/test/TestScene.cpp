@@ -5,7 +5,7 @@
 namespace lab
 {
     TestScene::TestScene()
-        : Layer(),  m_Model{ 1.0f }, m_View{ 1.0f }, m_Proj{ 1.0f }
+        : Scene(),  m_Model{ 1.0f }, m_View{ 1.0f }, m_Proj{ 1.0f }
     {
         m_VertexArray = MakeRef<VertexArray>();
         m_VertexArray->Bind();
@@ -42,7 +42,7 @@ namespace lab
 
     void TestScene::OnUpdate(float deltaTime)
     {
-        Layer::OnUpdate(deltaTime);
+        Scene::OnUpdate(deltaTime);
         
         m_Proj = glm::perspective(glm::radians(m_Camera->GetFieldOfView()), 800.0f / 600.0f, 0.1f, 100.0f);
         m_Shader->SetUniformMatrix4fv("u_Proj", m_Proj);
@@ -51,7 +51,7 @@ namespace lab
 
     void TestScene::OnRender()
     {
-        Layer::OnRender();
+        Scene::OnRender();
 
         GL_CHECK(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
         GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -77,6 +77,6 @@ namespace lab
 
     void TestScene::OnGui()
     {
-        Layer::OnGui();
+        Scene::OnGui();
     }
 }

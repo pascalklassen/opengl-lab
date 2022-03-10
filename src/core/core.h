@@ -1,7 +1,7 @@
 #pragma once
 
-#include "debug/debug.h"
-#include "memory/memory.h"
-#include "platform/platform.h"
-#include "scene/scene.h"
-#include "vendor/vendor.h"
+#include "debug/_includes.h"
+#include "memory/_includes.h"
+#include "platform/_includes.h"
+#include "scene/_includes.h"
+#include "vendor/_includes.h"

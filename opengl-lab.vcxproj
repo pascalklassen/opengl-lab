@@ -143,13 +143,12 @@
   <ItemGroup>
     <ClCompile Include="src\core\scene\Camera.cpp" />
     <ClCompile Include="src\core\scene\Entity.cpp" />
-    <ClCompile Include="src\core\core.cpp" />
     <ClCompile Include="src\core\debug\debug.cpp" />
     <ClCompile Include="src\core\platform\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\core\memory\ref.cpp" />
-    <ClCompile Include="src\core\scene\Layer.cpp" />
-    <ClCompile Include="src\core\scene\LayerRenderer.cpp" />
+    <ClCompile Include="src\core\scene\Scene.cpp" />
+    <ClCompile Include="src\core\scene\SceneRenderer.cpp" />
     <ClCompile Include="src\core\memory\scope.cpp" />
     <ClCompile Include="src\core\platform\Shader.cpp" />
     <ClCompile Include="src\core\vendor\stb_image.cpp" />
@@ -159,20 +158,21 @@
     <ClCompile Include="src\core\platform\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\scene\scene.h" />
-    <ClInclude Include="src\core\memory\memory.h" />
-    <ClInclude Include="src\core\platform\platform.h" />
+    <ClInclude Include="src\core\debug\_includes.h" />
+    <ClInclude Include="src\core\scene\_includes.h" />
+    <ClInclude Include="src\core\memory\_includes.h" />
+    <ClInclude Include="src\core\platform\_includes.h" />
     <ClInclude Include="src\core\scene\Camera.h" />
     <ClInclude Include="src\core\scene\Entity.h" />
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\debug\debug.h" />
     <ClInclude Include="src\core\platform\IndexBuffer.h" />
     <ClInclude Include="src\core\memory\ref.h" />
-    <ClInclude Include="src\core\scene\Layer.h" />
-    <ClInclude Include="src\core\scene\LayerRenderer.h" />
+    <ClInclude Include="src\core\scene\Scene.h" />
+    <ClInclude Include="src\core\scene\SceneRenderer.h" />
     <ClInclude Include="src\core\memory\scope.h" />
     <ClInclude Include="src\core\platform\Shader.h" />
-    <ClInclude Include="src\core\vendor\vendor.h" />
+    <ClInclude Include="src\core\vendor\_includes.h" />
     <ClInclude Include="src\test\TestScene.h" />
     <ClInclude Include="src\core\platform\Texture.h" />
     <ClInclude Include="src\core\platform\VertexArray.h" />

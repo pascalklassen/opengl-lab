@@ -10,7 +10,7 @@
 
 namespace lab
 {
-    class TestScene : public Layer
+    class TestScene : public Scene
     {
     private:
         static constexpr GLfloat vertices[] =

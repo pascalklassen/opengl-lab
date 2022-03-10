@@ -1,32 +1,32 @@
-#include "Layer.h"
+#include "Scene.h"
 
-#include "../memory/memory.h"
+#include "../memory/_includes.h"
 #include "Entity.h"
 
 namespace lab
 {
-    Layer::Layer()
+    Scene::Scene()
     {
     }
 
-    void Layer::Add(const Ref<Entity>& entity)
+    void Scene::Add(const Ref<Entity>& entity)
     {
         m_Entities.push_back(entity);
     }
 
-    void Layer::OnUpdate(float deltaTime)
+    void Scene::OnUpdate(float deltaTime)
     {
         for (const Ref<Entity>& entity : m_Entities)
             entity->OnUpdate(deltaTime);
     }
 
-    void Layer::OnRender()
+    void Scene::OnRender()
     {
         for (const Ref<Entity>& entity : m_Entities)
             entity->OnRender();
     }
 
-    void Layer::OnGui()
+    void Scene::OnGui()
     {
         for (const Ref<Entity>& entity : m_Entities)
             entity->OnGui();
